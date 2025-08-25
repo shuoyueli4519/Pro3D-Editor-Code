@@ -1,0 +1,7 @@
+pretrained_model_name_or_path: stabilityai/stable-diffusion-xl-base-1.0
+checkpoint_prefix: .
+output_dir: output
+local_rank: -1
+mixed_precision: fp16
+report_to: wandb
+seed: 0
