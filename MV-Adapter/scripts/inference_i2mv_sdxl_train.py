@@ -267,15 +267,15 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     # Models
     parser.add_argument(
-        "--base_model", type=str, default="stabilityai/stable-diffusion-xl-base-1.0"
+        "--base_model", type=str, default="../../huggingface/models--stabilityai--stable-diffusion-xl-base-1.0"
     )
     parser.add_argument(
-        "--vae_model", type=str, default="madebyollin/sdxl-vae-fp16-fix"
+        "--vae_model", type=str, default="../../huggingface/models--madebyollin--sdxl-vae-fp16-fix"
     )
     parser.add_argument("--unet_model", type=str, default=None)
     parser.add_argument("--scheduler", type=str, default=None)
     parser.add_argument("--lora_model", type=str, default=None)
-    parser.add_argument("--adapter_path", type=str, default="huanngzh/mv-adapter")
+    parser.add_argument("--adapter_path", type=str, default="../../huggingface/models--huanngzh--mv-adapter")
     parser.add_argument("--num_views", type=int, default=6)
     # Device
     parser.add_argument("--device", type=str, default="cuda")
@@ -314,7 +314,7 @@ if __name__ == "__main__":
 
     if args.remove_bg:
         birefnet = AutoModelForImageSegmentation.from_pretrained(
-            "ZhengPeng7/BiRefNet", trust_remote_code=True
+            "../../huggingface/models--ZhengPeng7--BiRefNet", trust_remote_code=True
         )
         birefnet.to(args.device)
         transform_image = transforms.Compose(

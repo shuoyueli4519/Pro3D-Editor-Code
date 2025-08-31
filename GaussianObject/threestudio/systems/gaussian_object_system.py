@@ -199,7 +199,7 @@ class GaussianDreamer(BaseLift3DSystem):
         self.point_cloud = self.init_pointcloud(self.init_dreamer)
 
         # metrics
-        self.psnr = PSNR().to("cuda")
+        self.psnr = PSNR(data_range=1.0).to("cuda")
         self.ssim = SSIM().to("cuda")
         self.lpips = LPIPS('vgg').to("cuda")
         self.lpips_loss = LPIPS('vgg').to("cuda")
@@ -215,7 +215,7 @@ class GaussianDreamer(BaseLift3DSystem):
         self.max_cam_dis: float = 0.
 
         # clip model
-        self.clip_model, self.clip_preprocess = clip.load('ViT-B/32', device=self.device)
+        self.clip_model, self.clip_preprocess = clip.load('./models/ViT-B-32.pt', device=self.device)
         self.gt_features_all = []
 
         # lr scheduler
