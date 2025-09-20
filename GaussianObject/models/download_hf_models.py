@@ -13,3 +13,9 @@ hf_hub_download(
     filename="control_v11f1e_sd15_tile.pth",
     local_dir=".",
 )
+
+hf_hub_download(
+    repo_id="jinaai/clip-models",
+    filename="ViT-B-32.pt",
+    local_dir=".",
+)

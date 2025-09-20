@@ -20,3 +20,10 @@ MV-Adapter/lora_output_rccar/
 MV-Adapter/results/
 MV-Adapter/output_reference.png
 MV-Adapter/output.png
+MV-Adapter/dataset/rccar/*
+
+huggingface/models--openai--clip-vit-large-patch14
+huggingface/models--huanngzh--mv-adapter
+huggingface/models--madebyollin--sdxl-vae-fp16-fix
+huggingface/models--stabilityai--stable-diffusion-xl-base-1.0
+huggingface/models--ZhengPeng7--BiRefNet
