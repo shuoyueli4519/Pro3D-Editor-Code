@@ -320,10 +320,10 @@ if __name__ == "__main__":
     
     i = 0
     for image in images:
-        image.save(f"./results/images/{i:03}" + ".png")
         image = remove_bg_fn(image)
         mask = save_background_as_mask(image, 768, 768)
         image = preprocess_image_white_bg(image, 768, 768)
+        image.save(f"./results/images/{i:03}" + ".png")
         mask.save(f"./results/masks/{i:03}" + ".png")
         i += 1
     make_image_grid(images, rows=1).save(args.output)
