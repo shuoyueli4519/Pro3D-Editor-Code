@@ -422,7 +422,7 @@ def main(args):
     text_encoder_two.requires_grad_(False)
     unet.requires_grad_(False)
     pipe.cond_encoder.requires_grad_(False)
-    pipe.copy_mv_linear_adapter()
+    # pipe.copy_mv_linear_adapter()
     
     unet.to(accelerator.device, dtype=weight_dtype)
     vae.to(accelerator.device, dtype=weight_dtype)
@@ -451,7 +451,7 @@ def main(args):
     #     lora_dropout=0.0,
     # )
     unet = get_peft_model(unet, unet_lora_config)
-    replace_copy_weights(pipe.unet)
+    # replace_copy_weights(pipe.unet)
 
     def unwrap_model(model):
         model = accelerator.unwrap_model(model)
@@ -708,7 +708,7 @@ def main(args):
                     lr_scheduler.step()
                     optimizer.zero_grad()
                 
-            replace_copy_weights(pipe.unet, False)
+            # replace_copy_weights(pipe.unet, False)
             
             if global_step % 100 == 0 and global_step > 0:
                 unet.save_pretrained(os.path.join(args.output_dir, "pipeckpts_" + str(global_step)))

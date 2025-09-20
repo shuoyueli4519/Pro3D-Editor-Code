@@ -22,7 +22,7 @@ def remove_bg(image, net, transform, device):
     return image
 
 birefnet = AutoModelForImageSegmentation.from_pretrained(
-        "ZhengPeng7/BiRefNet", trust_remote_code=True
+        "../../huggingface/models--ZhengPeng7--BiRefNet", trust_remote_code=True
     )
 birefnet.to("cuda")
 transform_image = transforms.Compose(
@@ -34,10 +34,10 @@ transform_image = transforms.Compose(
 )
 remove_bg_fn = lambda x: remove_bg(x, birefnet, transform_image, "cuda")
 
-images_file = [f for f in os.listdir("../dataset/rccar_fixed") if f.endswith(".png")]
+images_file = [f for f in os.listdir("../dataset/rccar") if f.endswith(".png")]
 for image_name in images_file:
     print(image_name)
-    image_path = os.path.join("../dataset/rccar_fixed", image_name)
+    image_path = os.path.join("../dataset/rccar", image_name)
     image = Image.open(image_path)
     image = remove_bg_fn(image)
-    image.save("../dataset/rccar_fixed/" + str(image_name.replace(".png", ".png")))
+    image.save("../dataset/rccar/" + str(image_name.replace(".png", ".png")))

@@ -57,12 +57,7 @@ def prepare_pipeline(
     pipe.init_custom_adapter(num_views=num_views)
     pipe.load_custom_adapter(
         adapter_path, weight_name="mvadapter_i2mv_sdxl.safetensors"
-    )
-    
-    with open("./unet.txt", "w") as f:
-        for name, module in pipe.unet.named_modules():
-            f.write(f"{name}: {module.__class__.__name__}\n")
-        
+    )    
 
     pipe.to(device=device, dtype=dtype)
     pipe.cond_encoder.to(device=device, dtype=dtype)
@@ -72,6 +67,10 @@ def prepare_pipeline(
     config = lora_name
     pipeline_unet = PeftModel.from_pretrained(pipe.unet, config)
     pipe.unet = pipeline_unet
+    
+    with open("./unet.txt", "w") as f:
+        for name, module in pipe.unet.named_modules():
+            f.write(f"{name}: {module.__class__.__name__}\n")
     
     # load lora if provided
     if lora_model is not None:
@@ -212,36 +211,6 @@ def run_pipeline(
     pipe_kwargs = {}
     if seed != -1 and isinstance(seed, int):
         pipe_kwargs["generator"] = torch.Generator(device=device).manual_seed(seed)
-
-    # import PIL
-    # import os
-    # # import numpy as np
-    # def _load_image(path):
-    #     image = PIL.Image.open(path)
-    #     image = np.array(image)
-    #     image = image.astype(np.float32) / 255.0
-    #     image = image[:, :, :3] * image[:, :, 3:4] + (1 - image[:, :, 3:4]) * 0.5
-    #     image = (image * 255).clip(0, 255).astype(np.uint8) / 255.0
-    #     return image
-    # transform = transforms.Compose([
-    #         transforms.ToTensor(),
-    #         transforms.Normalize([0.5], [0.5])
-    #     ])
-    # object_dirs = "./dataset/girl"
-    # images = [f for f in os.listdir(object_dirs) if f.endswith(".png")]
-    # images = sorted(images)
-    # imgs_in = [transform(_load_image(os.path.join(object_dirs, f)).astype(np.float32)) for f in images]
-    # imgs_in = torch.stack(imgs_in, dim=0).to(device=device, dtype=torch.float16)
-    # latents = pipe.vae.encode(imgs_in).latent_dist.mode() * pipe.vae.config.scaling_factor
-    # # latents_save = latents.detach().view(latents.shape[0], -1)
-    # # np.savetxt('inference.txt', latents_save.cpu().numpy(), fmt='%.4f')
-    # noise = torch.randn_like(latents)
-    # timesteps = torch.randint(2, 3, (1, ), device=latents.device).repeat_interleave(6)
-    # timesteps = timesteps.long()
-    # latents = pipe.scheduler.add_noise(latents, noise, timesteps)
-    
-    # timesteps = torch.tensor([181, 161,
-    #     141, 121, 101,  81,  61,  41,  21,   1], device="cpu")
     
     images = pipe(
         text,
@@ -351,10 +320,10 @@ if __name__ == "__main__":
     
     i = 0
     for image in images:
+        image.save(f"./results/images/{i:03}" + ".png")
         image = remove_bg_fn(image)
         mask = save_background_as_mask(image, 768, 768)
         image = preprocess_image_white_bg(image, 768, 768)
-        image.save(f"./results/images/{i:03}" + ".png")
         mask.save(f"./results/masks/{i:03}" + ".png")
         i += 1
     make_image_grid(images, rows=1).save(args.output)
