@@ -80,6 +80,8 @@ class MVAdapterDataset(Dataset):
     
     def _load_image(self, path):
         image = PIL.Image.open(path)
+        image_resized = image.resize((768, 768), Image.LANCZOS)
+        image = image_resized
         image = np.array(image)
         image = image.astype(np.float32) / 255.0
         image = image[:, :, :3] * image[:, :, 3:4] + (1 - image[:, :, 3:4]) * 0.5

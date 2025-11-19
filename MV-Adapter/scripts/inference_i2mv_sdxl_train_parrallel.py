@@ -258,7 +258,8 @@ if __name__ == "__main__":
         type=str,
         default="watermark, ugly, deformed, noisy, blurry, low contrast",
     )
-    parser.add_argument("--output", type=str, default="output.png")
+    parser.add_argument("--output", type=str, required=True,
+                    help="Output directory, inside it create images/ and masks/")
     # Extra
     parser.add_argument("--remove_bg", action="store_true", help="Remove background")
     parser.add_argument("--lora_name", type=str, default="./lora_output/pipeckpts")
@@ -311,16 +312,23 @@ if __name__ == "__main__":
         remove_bg_fn=remove_bg_fn,
     )
     
-    os.makedirs("./results/images", exist_ok=True)
-    os.makedirs("./results/masks", exist_ok=True)
+    output_dir = args.output.rstrip("/")
+    images_dir = os.path.join(output_dir, "images")
+    masks_dir  = os.path.join(output_dir, "masks")
     
-    i = 0
-    for image in images:
-        image = remove_bg_fn(image)
-        mask = save_background_as_mask(image, 768, 768)
-        image = preprocess_image_white_bg(image, 768, 768)
-        image.save(f"./results/images/{i:03}" + ".png")
-        mask.save(f"./results/masks/{i:03}" + ".png")
-        i += 1
-    make_image_grid(images, rows=1).save(args.output)
-    reference_image.save(args.output.rsplit(".", 1)[0] + "_reference.png")
+    os.makedirs(images_dir, exist_ok=True)
+    os.makedirs(masks_dir, exist_ok=True)
+    
+    for i, image in enumerate(images):
+        img = remove_bg_fn(image)
+        mask = save_background_as_mask(img, 768, 768)
+        img_white = preprocess_image_white_bg(img, 768, 768)
+
+        img_white.save(os.path.join(images_dir, f"{i:03}.png"))
+        mask.save(os.path.join(masks_dir, f"{i:03}.png"))
+    
+    grid_path = os.path.join(output_dir, "grid.png")
+    ref_path  = os.path.join(output_dir, "reference.png")
+    
+    make_image_grid(images, rows=1).save(grid_path)
+    reference_image.save(ref_path)

@@ -27,3 +27,15 @@ huggingface/models--huanngzh--mv-adapter
 huggingface/models--madebyollin--sdxl-vae-fp16-fix
 huggingface/models--stabilityai--stable-diffusion-xl-base-1.0
 huggingface/models--ZhengPeng7--BiRefNet
+
+MV-Adapter/unet.txt
+MV-Adapter/lora_output_3D_model_gpu1
+MV-Adapter/lora_output_3D_model_gpu0
+MV-Adapter/lora_output_3D_model
+
+MV-Adapter/dataset/3D_model
+MV-Adapter/dataset/3D_model_gpu0
+MV-Adapter/dataset/3D_model_gpu1
+MV-Adapter/create_dataset
+MV-Adapter/create_dataset_new
+MV-Adapter/visulization

@@ -70,14 +70,14 @@ def parse_args(input_args=None):
     parser.add_argument(
         "--pretrained_model_name_or_path",
         type=str,
-        default="../huggingface/models--stabilityai--stable-diffusion-xl-base-1.0",
+        default="stabilityai/stable-diffusion-xl-base-1.0",
         required=False,
         help="Path to pretrained model or model identifier from huggingface.co/models.",
     )
     parser.add_argument(
         "--pretrained_vae_model_name_or_path",
         type=str,
-        default="../huggingface/models--madebyollin--sdxl-vae-fp16-fix",
+        default="madebyollin/sdxl-vae-fp16-fix",
         required=False,
         help="Path to pretrained VAE model with better numerical stability. More details: https://github.com/huggingface/diffusers/pull/4038.",
     )
@@ -397,7 +397,7 @@ def main(args):
     )
     pipe.init_custom_adapter(num_views=6)
     pipe.load_custom_adapter(
-        "../huggingface/models--huanngzh--mv-adapter", weight_name="mvadapter_i2mv_sdxl.safetensors"
+        "huanngzh/mv-adapter", weight_name="mvadapter_i2mv_sdxl.safetensors"
     )
     pipe.to(device=accelerator.device, dtype=weight_dtype)
     pipe.cond_encoder.to(device=accelerator.device, dtype=weight_dtype)
@@ -687,7 +687,7 @@ def main(args):
                     
                 avg_loss = accelerator.gather(loss.repeat(args.train_batch_size)).mean()
                 
-                print(f"loss : {avg_loss}")
+                # print(f"loss : {avg_loss}")
                 if torch.isnan(avg_loss):
                     print("🚨 NaN detected in loss!")
                 if torch.isinf(avg_loss):
